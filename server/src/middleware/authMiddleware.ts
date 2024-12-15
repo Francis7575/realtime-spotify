@@ -18,18 +18,18 @@ export const requireAdmin = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const currentUser = await clerkClient.users.getUser(req.auth!.userId!);
     const isAdmin =
       process.env.ADMIN_EMAIL === currentUser.primaryEmailAddress?.emailAddress;
 
     if (!isAdmin) {
-      return res
-        .status(403)
-        .json({ message: "Unauthorized - you must be an admin" });
+      res.status(403).json({ message: "Unauthorized - you must be an admin" });
+      return;
     }
-    next(); 
+    
+    next();
   } catch (error) {
     next(error);
   }

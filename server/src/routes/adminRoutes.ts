@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getAdmin } from "../controllers/adminController";
+import { createSong } from "../controllers/adminController";
+import { protectRoute, requireAdmin } from './../middleware/authMiddleware';
 
 const router = Router()
 
-router.get('/', getAdmin)
+router.post('/create-song', protectRoute, requireAdmin, createSong)
 
 export default router
