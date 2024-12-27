@@ -1,5 +1,4 @@
 import { clerkClient } from "@clerk/express";
-
 import { Request, Response, NextFunction } from "express";
 
 export const protectRoute = async (
@@ -28,7 +27,6 @@ export const requireAdmin = async (
       res.status(403).json({ message: "Unauthorized - you must be an admin" });
       return;
     }
-    
     next();
   } catch (error) {
     next(error);

@@ -23,12 +23,6 @@ const options = {
 app.use(express.json()); // allow to parse req.body
 app.use(clerkMiddleware(options)); // this will add auth to the request object
 
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/songs", songRoutes);
-app.use("/api/albums", albumRoutes);
-app.use("/api/stats", statRoutes);
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -39,6 +33,13 @@ app.use(
     },
   })
 );
+
+app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/songs", songRoutes);
+app.use("/api/albums", albumRoutes);
+app.use("/api/stats", statRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
