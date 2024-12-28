@@ -11,6 +11,7 @@ import songRoutes from "./routes/songRoutes";
 import albumRoutes from "./routes/albumRoutes";
 import statRoutes from "./routes/statRoutes";
 import dotenv from "dotenv";
+import cors from "cors"
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,10 @@ const options = {
 
 app.use(express.json()); // allow to parse req.body
 app.use(clerkMiddleware(options)); // this will add auth to the request object
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  credentials: true
+}));
 
 app.use(
   fileUpload({
