@@ -5,7 +5,9 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node src/server.ts",
-    "dev": "tsc && nodemon dist/server.js"
+    "dev": "tsc && nodemon dist/server.js",
+    "seed:songs": "ts-node src/seeds/songs.ts",
+    "seed:albums": "ts-node src/seeds/albums.ts"
   },
   "keywords": [],
   "author": "",
