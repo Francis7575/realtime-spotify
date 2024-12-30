@@ -19,16 +19,35 @@ export const requireAdmin = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const currentUser = await clerkClient.users.getUser(req.auth!.userId!);
-    const isAdmin =
-      process.env.ADMIN_EMAIL === currentUser.primaryEmailAddress?.emailAddress;
+    const adminEmail = process.env.ADMIN_EMAIL;
+    if (!adminEmail) {
+      throw new Error("ADMIN_EMAIL is not defined in .env file");
+    }
 
-    if (!isAdmin) {
+    const userId = req.auth?.userId;
+
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized - user ID not found" });
+      return;
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    const userEmail = user.emailAddresses?.[0]?.emailAddress;
+
+    if (userEmail !== adminEmail) {
       res.status(403).json({ message: "Unauthorized - you must be an admin" });
       return;
     }
+
     next();
   } catch (error) {
-    next(error);
+    console.error("Error in requireAdmin middleware:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
