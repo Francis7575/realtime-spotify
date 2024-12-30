@@ -78,10 +78,10 @@ export const getTrendingSongs = async (
   next: NextFunction
 ) => {
   try {
-    // fetch 6 random songs using mongo aggregation pipeline
+    // fetch 4 random songs using mongo aggregation pipeline
     const songs = await Song.aggregate([
       {
-        $sample: { size: 6 },
+        $sample: { size: 4 },
       },
       // display these in the UI
       {
