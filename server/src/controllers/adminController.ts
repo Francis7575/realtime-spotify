@@ -3,10 +3,17 @@ import { Song } from "../models/songModel";
 import { Album } from "../models/albumModel";
 import cloudinary from "../lib/cloudinary";
 
+type UploadedFile = {
+  tempFilePath?: string;
+};
+
 // helper function for cloudinary uploads
-const uploadToCloudinary = async (file: any) => {
-  console.log(file);
+const uploadToCloudinary = async (file: UploadedFile) => {
+  console.log("file data:", file);
   try {
+    if (!file.tempFilePath) {
+      throw new Error("File path is undefined");
+    }
     const result = await cloudinary.uploader.upload(file.tempFilePath, {
       resource_type: "auto",
     });
@@ -32,8 +39,11 @@ export const createSong = async (
     const audioFile = req.files.audioFile;
     const imageFile = req.files.imageFile;
 
-    const audioUrl = await uploadToCloudinary(audioFile);
-    const imageUrl = await uploadToCloudinary(imageFile);
+    const singleImageFile = Array.isArray(imageFile) ? imageFile[0] : imageFile;
+    const singleAudioUrl = Array.isArray(audioFile) ? audioFile[0] : audioFile;
+
+    const audioUrl = await uploadToCloudinary(singleAudioUrl);
+    const imageUrl = await uploadToCloudinary(singleImageFile);
 
     const song = new Song({
       title,
@@ -98,7 +108,8 @@ export const createAlbum = async (
     const { title, artist, releaseYear } = req.body;
     const imageFile = req.files.imageFile;
 
-    const imageUrl = await uploadToCloudinary(imageFile);
+    const singleImageFile = Array.isArray(imageFile) ? imageFile[0] : imageFile;
+    const imageUrl = await uploadToCloudinary(singleImageFile);
 
     const album = new Album({
       title,
@@ -134,9 +145,7 @@ export const deleteAlbum = async (
 
 export const checkAdmin = async (
   req: Request,
-  res: Response,
+  res: Response
 ): Promise<void> => {
   res.status(200).json({ admin: true });
-}
-
-
+};
