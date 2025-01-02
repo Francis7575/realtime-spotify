@@ -17,14 +17,6 @@ const AlbumPage = () => {
   const { fetchAlbumById, currentAlbum, isLoading } = useMusicStore();
   const { currentSong, isPlaying, playAlbum, togglePlay } = usePlayerStore();
 
-  const { fetchAlbums, fetchSongs, fetchStats } = useMusicStore();
-
-	useEffect(() => {
-		fetchAlbums();
-		fetchSongs();
-		fetchStats();
-	}, [fetchAlbums, fetchSongs, fetchStats]);
-  
   useEffect(() => {
     if (albumId) fetchAlbumById(albumId);
   }, [fetchAlbumById, albumId]);
