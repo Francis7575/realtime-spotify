@@ -101,6 +101,7 @@ const SongsTable = () => {
           onCancel={() => setIsModalOpen(false)}
           setIsModalOpen={setIsModalOpen}
           deleteName={selectedSongTitle}
+          deleteType={"Song"}
         />
       )}
     </>

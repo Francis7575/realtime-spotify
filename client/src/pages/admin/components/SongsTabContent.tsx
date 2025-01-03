@@ -8,8 +8,16 @@ import {
 import { Music } from "lucide-react";
 import SongsTable from "./SongsTable";
 import AddSongDialog from "./AddSongDialog";
+import { useEffect } from "react";
+import { useMusicStore } from "@/stores/useMusicStore";
 
 const SongsTabContent = () => {
+  const { fetchSongs } = useMusicStore();
+  
+  useEffect(() => {
+    fetchSongs();
+  }, []);
+
   return (
     <Card>
       <CardHeader>

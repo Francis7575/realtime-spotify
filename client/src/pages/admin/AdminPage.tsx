@@ -15,6 +15,8 @@ const AdminPage = () => {
 
   const { fetchAlbums, fetchSongs, fetchStats, deleteSong } = useMusicStore();
 
+
+
   useEffect(() => {
     fetchAlbums();
     fetchSongs();

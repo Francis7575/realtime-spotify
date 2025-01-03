@@ -9,7 +9,6 @@ type UploadedFile = {
 
 // helper function for cloudinary uploads
 const uploadToCloudinary = async (file: UploadedFile) => {
-  console.log("file data:", file);
   try {
     if (!file.tempFilePath) {
       throw new Error("File path is undefined");

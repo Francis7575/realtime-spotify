@@ -5,9 +5,10 @@ type DeleteModalProps = {
   onCancel: () => void
   setIsModalOpen: (param: boolean) => void
   deleteName: string | null
+  deleteType: string | null
 }
 
-const DeleteModal = ({ onDelete, onCancel, setIsModalOpen, deleteName }: DeleteModalProps) => {
+const DeleteModal = ({ onDelete, onCancel, setIsModalOpen, deleteName, deleteType }: DeleteModalProps) => {
 
   const handleOverlayClick = () => {
     setIsModalOpen(false)
@@ -39,7 +40,7 @@ const DeleteModal = ({ onDelete, onCancel, setIsModalOpen, deleteName }: DeleteM
           maxWidth: { xs: '300px', 'md': '500px' },
         }}>
         <Typography component="p" sx={{ color: "black" }}>
-          Are you sure you want to delete {deleteName}?
+          Are you sure you want to delete {deleteName} {deleteType}?
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", marginTop: "20px" }}>
           <Button variant="text" color="success"
