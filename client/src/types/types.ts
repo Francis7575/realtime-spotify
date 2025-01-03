@@ -25,3 +25,19 @@ export type Stats = {
   totalUsers: number;
   totalArtists: number;
 };
+
+export type Message = {
+	_id: string;
+	senderId: string;
+	receiverId: string;
+	content: string;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export type User = {
+	_id: string;
+	clerkId: string;
+	fullName: string;
+	imageUrl: string;
+}
