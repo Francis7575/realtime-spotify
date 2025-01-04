@@ -1,98 +1,160 @@
 import { create } from "zustand";
 import { Song } from "@/types/types";
+import { useChatStore } from "./useChatStore";
 
 type PlayerStore = {
-	currentSong: Song | null;
-	isPlaying: boolean;
-	queue: Song[];
-	currentIndex: number;
+  currentSong: Song | null;
+  isPlaying: boolean;
+  queue: Song[];
+  currentIndex: number;
 
-	initializeQueue: (songs: Song[]) => void;
-	playAlbum: (songs: Song[], startIndex?: number) => void;
-	setCurrentSong: (song: Song | null) => void;
-	togglePlay: () => void;
-	playNext: () => void;
-	playPrevious: () => void;
-}
+  initializeQueue: (songs: Song[]) => void;
+  playAlbum: (songs: Song[], startIndex?: number) => void;
+  setCurrentSong: (song: Song | null) => void;
+  togglePlay: () => void;
+  playNext: () => void;
+  playPrevious: () => void;
+};
 
 export const usePlayerStore = create<PlayerStore>((set, get) => ({
-    currentSong: null,
-	isPlaying: false,
-	queue: [],
-	currentIndex: -1,
+  currentSong: null,
+  isPlaying: false,
+  queue: [],
+  currentIndex: -1,
 
-    initializeQueue: (songs: Song[]) => {
-		set({
-			queue: songs,
-			currentSong: get().currentSong || songs[0],
-			currentIndex: get().currentIndex === -1 ? 0 : get().currentIndex,
-		});
-	},
-    playAlbum: (songs: Song[], startIndex = 0) => {
-		if (songs.length === 0) return;
+  initializeQueue: (songs: Song[]) => {
+    set({
+      queue: songs,
+      currentSong: get().currentSong || songs[0],
+      currentIndex: get().currentIndex === -1 ? 0 : get().currentIndex,
+    });
+  },
+  playAlbum: (songs: Song[], startIndex = 0) => {
+    if (songs.length === 0) return;
 
-		const song = songs[startIndex];
+    const song = songs[startIndex];
 
-		set({
-			queue: songs,
-			currentSong: song,
-			currentIndex: startIndex,
-			isPlaying: true,
-		});
-	},
+    const socket = useChatStore.getState().socket;
+    if (socket.auth) {
+      socket.emit("update_activity", {
+        userId: socket.auth.userId,
+        activity: `Playing ${song.title} by ${song.artist}`,
+      });
+    }
 
-    setCurrentSong: (song: Song | null) => {
-		if (!song) return;
+    set({
+      queue: songs,
+      currentSong: song,
+      currentIndex: startIndex,
+      isPlaying: true,
+    });
+  },
 
-		const songIndex = get().queue.findIndex((s) => s._id === song._id);
-		set({
-			currentSong: song,
-			isPlaying: true,
-			currentIndex: songIndex !== -1 ? songIndex : get().currentIndex,
-		});
-	},
+  setCurrentSong: (song: Song | null) => {
+    if (!song) return;
 
-    togglePlay: () => {
-		const willStartPlaying = !get().isPlaying;
+    const songIndex = get().queue.findIndex((s) => s._id === song._id);
 
-		set({
-			isPlaying: willStartPlaying,
-		});
-	},
+    const socket = useChatStore.getState().socket;
+    if (socket.auth) {
+      socket.emit("update_activity", {
+        userId: socket.auth.userId,
+        activity: `Playing ${song.title} by ${song.artist}`,
+      });
+    }
 
-	playNext: () => {
-		const { currentIndex, queue } = get();
-		const nextIndex = currentIndex + 1;
+    set({
+      currentSong: song,
+      isPlaying: true,
+      currentIndex: songIndex !== -1 ? songIndex : get().currentIndex,
+    });
+  },
 
-		// if there is a next song to play, let's play it
-		if (nextIndex < queue.length) {
-			const nextSong = queue[nextIndex];
+  togglePlay: () => {
+    const willStartPlaying = !get().isPlaying;
 
-			set({
-				currentSong: nextSong,
-				currentIndex: nextIndex,
-				isPlaying: true,
-			});
-		} else {
-			// no next song
-			set({ isPlaying: false });
-		}
-	},
-	playPrevious: () => {
-		const { currentIndex, queue } = get();
-		const prevIndex = currentIndex - 1;
+    const currentSong = get().currentSong;
+    const socket = useChatStore.getState().socket;
+    if (socket.auth) {
+      socket.emit("update_activity", {
+        userId: socket.auth.userId,
+        activity:
+          willStartPlaying && currentSong
+            ? `Playing ${currentSong.title} by ${currentSong.artist}`
+            : "Idle",
+      });
+    }
 
-		if (prevIndex >= 0) {
-			const prevSong = queue[prevIndex];
+    set({
+      isPlaying: willStartPlaying,
+    });
+  },
 
-			set({
-				currentSong: prevSong,
-				currentIndex: prevIndex,
-				isPlaying: true,
-			});
-		} else {
-			// no prev song
-			set({ isPlaying: false });
-		}
-	}
-}))
+  playNext: () => {
+    const { currentIndex, queue } = get();
+    const nextIndex = currentIndex + 1;
+
+    // if there is a next song to play, let's play it
+    if (nextIndex < queue.length) {
+      const nextSong = queue[nextIndex];
+
+      const socket = useChatStore.getState().socket;
+      if (socket.auth) {
+        socket.emit("update_activity", {
+          userId: socket.auth.userId,
+          activity: `Playing ${nextSong.title} by ${nextSong.artist}`,
+        });
+      }
+
+      set({
+        currentSong: nextSong,
+        currentIndex: nextIndex,
+        isPlaying: true,
+      });
+    } else {
+      // no next song
+      set({ isPlaying: false });
+
+      const socket = useChatStore.getState().socket;
+      if (socket.auth) {
+        socket.emit("update_activity", {
+          userId: socket.auth.userId,
+          activity: `Idle`,
+        });
+      }
+    }
+  },
+  playPrevious: () => {
+    const { currentIndex, queue } = get();
+    const prevIndex = currentIndex - 1;
+
+    if (prevIndex >= 0) {
+      const prevSong = queue[prevIndex];
+
+      const socket = useChatStore.getState().socket;
+      if (socket.auth) {
+        socket.emit("update_activity", {
+          userId: socket.auth.userId,
+          activity: `Playing ${prevSong.title} by ${prevSong.artist}`,
+        });
+      }
+
+      set({
+        currentSong: prevSong,
+        currentIndex: prevIndex,
+        isPlaying: true,
+      });
+    } else {
+      // no prev song
+      set({ isPlaying: false });
+
+      const socket = useChatStore.getState().socket;
+      if (socket.auth) {
+        socket.emit("update_activity", {
+          userId: socket.auth.userId,
+          activity: `Idle`,
+        });
+      }
+    }
+  },
+}));

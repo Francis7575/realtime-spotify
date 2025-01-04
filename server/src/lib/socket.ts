@@ -20,14 +20,14 @@ export const initializeSocket = (server: HttpServer) => {
 
       // broadcast to all connected sockets that this user just logged in
       io.emit("user_connected", userId);
-
+ 
       socket.emit("users_online", Array.from(userSockets.keys()));
 
       io.emit("activities", Array.from(userActivities.entries()));
     });
 
     socket.on("update_activity", ({ userId, activity }) => {
-      console.log("activity updated", userId, activity);
+      // console.log("activity updated", userId, activity);
       userActivities.set(userId, activity);
       io.emit("activity_updated", { userId, activity });
     });
