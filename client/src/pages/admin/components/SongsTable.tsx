@@ -16,7 +16,9 @@ const SongsTable = () => {
   const { songs, isLoading, error, deleteSong } = useMusicStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSongId, setSelectedSongId] = useState<string | null>(null);
-  const [selectedSongTitle, setSelectedSongTitle] = useState<string | null>(null);
+  const [selectedSongTitle, setSelectedSongTitle] = useState<string | null>(
+    null
+  );
 
   if (isLoading) {
     return (
@@ -49,14 +51,14 @@ const SongsTable = () => {
 
   return (
     <>
-      <Table>
+      <Table className="table-fixed">
         <TableHeader>
           <TableRow className="hover:bg-zinc-800/50">
-            <TableHead className="w-[50px]"></TableHead>
-            <TableHead>Title</TableHead>
-            <TableHead>Artist</TableHead>
-            <TableHead>Release Date</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead className="w-16">Image</TableHead>
+            <TableHead className="w-32">Title</TableHead>
+            <TableHead className="w-32">Artist</TableHead>
+            <TableHead className="w-32">Release Date</TableHead>
+            <TableHead className="text-right w-16">Actions</TableHead>
           </TableRow>
         </TableHeader>
 

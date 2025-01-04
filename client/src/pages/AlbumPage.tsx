@@ -1,5 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useMusicStore } from "@/stores/useMusicStore";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { Clock, Pause, Play } from "lucide-react";
@@ -43,8 +51,8 @@ const AlbumPage = () => {
   };
 
   return (
-    <div className="h-full">
-      <ScrollArea className="h-full rounded-md">
+    <div className="h-full w-full custom-scrollbar">
+      <div className="h-full rounded-md overflow-y-auto overflow-x-hidden ">
         {/* Main Content */}
         <div className="relative min-h-full">
           {/* bg gradient */}
@@ -96,73 +104,75 @@ const AlbumPage = () => {
             </Button>
           </div>
 
-          {/* Table Section */}
-          <div className="bg-black/20 backdrop-blur-sm relative">
-            {/* table header  */}
-            <div
-              className="grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-10 py-2 text-sm 
-            text-zinc-400 border-b border-white/5"
-            >
-              <div>#</div>
-              <div>Title</div>
-              <div>Released Date</div>
-              <div>
-                <Clock className="h-4 w-4" />
-              </div>
-            </div>
-          </div>
-
           {/* songs list */}
-          <div className="px-6 relative">
-            <div className="space-y-2 py-4">
-              {currentAlbum?.songs.map((song, index) => {
-                const isCurrentSong = currentSong?._id === song._id;
-                return (
-                  <div
-                    key={song._id}
-                    onClick={() => handlePlaySong(index)}
-                    className={`grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-4 py-2 text-sm 
-          text-zinc-400 hover:bg-white/5 rounded-md group cursor-pointer
-          `}
-                  >
-                    <div className="flex items-center justify-center">
-                      {isCurrentSong && isPlaying ? (
-                        <div className="size-4 text-green-500">♫</div>
-                      ) : (
-                        <span className="group-hover:hidden">{index + 1}</span>
-                      )}
-                      {!isCurrentSong && (
-                        <Play className="h-4 w-4 hidden group-hover:block" />
-                      )}
-                    </div>
+          <div className="px-6">
+            <div className="overflow-x-auto">
+              <Table className="table-fixed">
+                <TableHeader>
+                  <TableRow className="hover:bg-zinc-800/50 ">
+                    <TableHead className="w-12 md:w-4 text-center">#</TableHead>
+                    <TableHead className="w-40 md:w-42">Title</TableHead>
+                    <TableHead className="w-40 md:w-42">
+                      Released Date
+                    </TableHead>
+                    <TableHead className="w-20 md:w-12 text-right">
+                      <Clock className="size-4" />
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
 
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={song.imageUrl}
-                        alt={song.title}
-                        className="size-10"
-                      />
+                <TableBody>
+                  {currentAlbum?.songs.map((song, index) => {
+                    const isCurrentSong = currentSong?._id === song._id;
+                    return (
+                      <TableRow
+                        key={song._id}
+                        onClick={() => handlePlaySong(index)}
+                        className="cursor-pointer group"
+                      >
+                        <TableCell>
+                          <div className="flex items-center justify-center py-4">
+                            {isCurrentSong && isPlaying ? (
+                              <div className="size-4 text-green-500">♫</div>
+                            ) : (
+                              <span className="group-hover:hidden">
+                                {index + 1}
+                              </span>
+                            )}
+                            {!isCurrentSong && (
+                              <Play className="h-4 w-4 hidden group-hover:block" />
+                            )}
+                          </div>
+                        </TableCell>
 
-                      <div>
-                        <div className={`font-medium text-white`}>
-                          {song.title}
-                        </div>
-                        <div>{song.artist}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      {song.createdAt.split("T")[0]}
-                    </div>
-                    <div className="flex items-center">
-                      {formatDuration(song.duration)}
-                    </div>
-                  </div>
-                );
-              })}
+                        <TableCell>
+                          <div className="flex items-center gap-3 py-4">
+                            <img
+                              src={song.imageUrl}
+                              alt={song.title}
+                              className="size-10"
+                            />
+                            <div>
+                              <div className="font-medium text-white">
+                                {song.title}
+                              </div>
+                              <div>{song.artist}</div>
+                            </div>
+                          </div>
+                        </TableCell>
+
+                        <TableCell>{song.createdAt.split("T")[0]}</TableCell>
+
+                        <TableCell>{formatDuration(song.duration)}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
             </div>
           </div>
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 };

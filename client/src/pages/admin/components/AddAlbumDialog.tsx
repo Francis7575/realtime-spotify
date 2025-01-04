@@ -70,7 +70,7 @@ const AddAlbumDialog = () => {
           Add Album
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-zinc-900 border-zinc-700 max-h-[80vh] overflow-auto">
+      <DialogContent className="bg-zinc-900 border-zinc-700 max-h-[80vh] overflow-auto max-w-[340px] md:max-w-md">
         <DialogHeader>
           <DialogTitle>Add New Album</DialogTitle>
           <DialogDescription>
@@ -159,6 +159,7 @@ const AddAlbumDialog = () => {
             variant="outline"
             onClick={() => setAlbumDialogOpen(false)}
             disabled={isLoading}
+            className="mt-4 md:mt-0"
           >
             Cancel
           </Button>

@@ -106,7 +106,7 @@ const AddSongDialog = () => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="bg-zinc-900 border-zinc-700 max-h-[80vh] overflow-auto">
+      <DialogContent className="bg-zinc-900 border-zinc-700 max-h-[80vh] overflow-auto max-w-[340px] md:max-w-md">
         <DialogHeader>
           <DialogTitle>Add New Song</DialogTitle>
           <DialogDescription>
@@ -246,6 +246,7 @@ const AddSongDialog = () => {
             variant="outline"
             onClick={() => setSongDialogOpen(false)}
             disabled={isLoading}
+            className="mt-2"
           >
             Cancel
           </Button>

@@ -14,21 +14,23 @@ import { useEffect, useState } from "react";
 
 const AlbumsTable = () => {
   const { albums, deleteAlbum, fetchAlbums } = useMusicStore();
-	const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAlbumId, setSelectedAlbumId] = useState<string | null>(null);
-  const [selectedAlbumTitle, setSelectedAlbumTitle] = useState<string | null>(null);
+  const [selectedAlbumTitle, setSelectedAlbumTitle] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     fetchAlbums();
   }, [fetchAlbums]);
 
-	const handleOpenModal = (albumId: string, albumTitle: string) => {
+  const handleOpenModal = (albumId: string, albumTitle: string) => {
     setSelectedAlbumId(albumId);
     setSelectedAlbumTitle(albumTitle);
     setIsModalOpen(true);
   };
 
-	const handleDelete = () => {
+  const handleDelete = () => {
     if (selectedAlbumId) {
       deleteAlbum(selectedAlbumId);
       setIsModalOpen(false);
@@ -37,15 +39,15 @@ const AlbumsTable = () => {
 
   return (
     <>
-      <Table>
+      <Table className="table-fixed">
         <TableHeader>
           <TableRow className="hover:bg-zinc-800/50">
-            <TableHead className="w-[50px]"></TableHead>
-            <TableHead>Title</TableHead>
-            <TableHead>Artist</TableHead>
-            <TableHead>Release Year</TableHead>
-            <TableHead>Songs</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead className="w-16">Image</TableHead>
+            <TableHead className="w-32">Title</TableHead>
+            <TableHead className="w-32">Artist</TableHead>
+            <TableHead className="w-32">Release Year</TableHead>
+            <TableHead className="w-32">Songs</TableHead>
+            <TableHead className="text-right w-16">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -77,7 +79,7 @@ const AlbumsTable = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-										onClick={() => handleOpenModal(album._id, album.title)}
+                    onClick={() => handleOpenModal(album._id, album.title)}
                     className="text-red-400 hover:text-red-300 hover:bg-red-400/10"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -94,7 +96,7 @@ const AlbumsTable = () => {
           onCancel={() => setIsModalOpen(false)}
           setIsModalOpen={setIsModalOpen}
           deleteName={selectedAlbumTitle}
-					deleteType={"Album"}
+          deleteType={"Album"}
         />
       )}
     </>
