@@ -22,7 +22,7 @@ type ChatStore = {
   setSelectedUser: (user: User | null) => void;
 };
 
-const baseURL = import.meta.env.MODE === "development" ? "http://localhost:5000" : "/";
+const baseURL = import.meta.env.MODE === "development" ? "http://localhost:5000" : "https://realtime-spotify-kappa.vercel.app";
 
 const socket = io(baseURL, {
   autoConnect: false, // only connect if user is authenticated
