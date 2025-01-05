@@ -1,6 +1,5 @@
 import { AuthObject, clerkClient } from "@clerk/express";
 import { Request, Response, NextFunction } from "express";
-import "../types/express"
 
 declare global {
   namespace Express {
