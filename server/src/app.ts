@@ -57,7 +57,9 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.use(morgan("dev"));
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 // error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
