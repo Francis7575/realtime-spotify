@@ -1,5 +1,6 @@
 import { clerkClient } from "@clerk/express";
 import { Request, Response, NextFunction } from "express";
+import "../types/express"
 
 export const protectRoute = async (
   req: Request,
