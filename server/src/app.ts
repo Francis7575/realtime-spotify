@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction }  from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { clerkClient, clerkMiddleware } from "@clerk/express";
 import morgan from "morgan";
 import fileUpload from "express-fileupload";
@@ -10,7 +10,7 @@ import songRoutes from "./routes/songRoutes";
 import albumRoutes from "./routes/albumRoutes";
 import statRoutes from "./routes/statRoutes";
 import dotenv from "dotenv";
-import cors from "cors"
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -23,10 +23,12 @@ const options = {
 app.use(express.json()); // allow to parse req.body
 app.use(clerkMiddleware(options)); // this will add auth to the request object
 
-app.use(cors({
-  origin: process.env.CLIENT_URL,
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
 
 app.use(
   fileUpload({
@@ -44,22 +46,20 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/songs", songRoutes);
 app.use("/api/albums", albumRoutes);
-app.use("/api/stats", statRoutes)
+app.use("/api/stats", statRoutes);
 
 if (process.env.NODE_ENV === "production") {
-	app.use(express.static(path.join(__dirname, "../frontend/dist")));
-	app.get("*", (req, res) => {
-		res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
-	});
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
+  });
 }
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
-}
+app.use(morgan("dev"));
 
 // error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

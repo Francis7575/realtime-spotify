@@ -19,18 +19,18 @@
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.0",
     "@types/express-fileupload": "^1.5.1",
+    "@types/morgan": "^1.9.9",
     "cloudinary": "^2.5.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-fileupload": "^1.5.1",
     "mongoose": "^8.9.0",
+    "morgan": "^1.10.0",
     "socket.io": "^4.8.1",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
-    "@types/morgan": "^1.9.9",
-    "morgan": "^1.10.0",
     "nodemon": "^3.1.9",
     "typescript": "^5.7.2"
   }
