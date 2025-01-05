@@ -15,6 +15,9 @@ const LeftSidebar = () => {
     fetchAlbums();
   }, [fetchAlbums]);
 
+  // Ensure albums is always an array
+  const albumsList = Array.isArray(albums) ? albums : [];
+
   return (
     <div className="h-full flex flex-col gap-2">
       {/* Navigation Menu */}
@@ -66,25 +69,29 @@ const LeftSidebar = () => {
               <PlaylistSkeleton />
             ) : (
               <div className="flex flex-col gap-5 md:gap-4">
-                {albums.map((album) => (
-                  <Link
-                    key={album._id}
-                    to={`/albums/${album._id}`}
-                    className="md:p-2 hover:bg-zinc-800 rounded-md flex items-center gap-3 group cursor-pointer"
-                  >
-                    <img
-                      src={album.imageUrl}
-                      alt="Playlist img"
-                      className="size-12 rounded-md flex-shrink-0 object-cover"
-                    />
-                    <div className="flex-1 min-w-0 hidden md:block">
-                      <p className="font-medium truncate">{album.title}</p>
-                      <p className="text-sm text-zinc-400 truncate">
-                        Album • {album.artist}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
+                {albumsList.length > 0 ? (
+                  albumsList.map((album) => (
+                    <Link
+                      key={album._id}
+                      to={`/albums/${album._id}`}
+                      className="md:p-2 hover:bg-zinc-800 rounded-md flex items-center gap-3 group cursor-pointer"
+                    >
+                      <img
+                        src={album.imageUrl}
+                        alt="Playlist img"
+                        className="size-12 rounded-md flex-shrink-0 object-cover"
+                      />
+                      <div className="flex-1 min-w-0 hidden md:block">
+                        <p className="font-medium truncate">{album.title}</p>
+                        <p className="text-sm text-zinc-400 truncate">
+                          Album • {album.artist}
+                        </p>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="text-white">No albums available</div>
+                )}
               </div>
             )}
           </div>
