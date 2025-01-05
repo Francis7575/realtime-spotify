@@ -1,23 +1,31 @@
 import { Song } from "@/types/types";
-import { Button } from "@/components/ui/button";
 import PlayButton from "./PlayButton";
+import ShowAllDialog from "./ShowAllDialog";
 
 type SectionGridProps = {
+  dialogTitle: string;
+  dialogDescription: string;
   title: string;
   songs: Song[];
+  fetchType: "trending" | "madeForYou";
 };
 
-const SectionGrid = ({ songs, title }: SectionGridProps) => {
+const SectionGrid = ({
+  songs,
+  title,
+  dialogTitle,
+  dialogDescription,
+  fetchType,
+}: SectionGridProps) => {
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl sm:text-2xl font-bold">{title}</h2>
-        <Button
-          variant="link"
-          className="text-sm text-zinc-400 hover:text-white"
-        >
-          Show all
-        </Button>
+        <ShowAllDialog
+          dialogTitle={dialogTitle}
+          dialogDescription={dialogDescription}
+          fetchType={fetchType}
+        />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -35,7 +43,7 @@ const SectionGrid = ({ songs, title }: SectionGridProps) => {
 									group-hover:scale-105"
                 />
               </div>
-							<PlayButton song={song} />
+              <PlayButton song={song} />
             </div>
             <h3 className="font-medium mb-2 truncate">{song.title}</h3>
             <p className="text-sm text-zinc-400 truncate">{song.artist}</p>

@@ -12,13 +12,17 @@ type MusicStore = {
   featuredSongs: Song[];
   madeForYouSongs: Song[];
   trendingSongs: Song[];
+  allMadeForYouSongs: Song[];
+  allTrendingSongs: Song[];
   stats: Stats;
 
   fetchAlbums: () => Promise<void>;
   fetchAlbumById: (id: string) => Promise<void>;
   fetchFeaturedSongs: () => Promise<void>;
   fetchMadeForYouSongs: () => Promise<void>;
+  fetchAllMadeForYouSongs: () => Promise<Song[]>;
   fetchTrendingSongs: () => Promise<void>;
+  fetchAllTrendingSongs: () => Promise<Song[]>;
   fetchStats: () => Promise<void>;
   fetchSongs: () => Promise<void>;
   deleteSong: (id: string) => Promise<void>;
@@ -31,9 +35,11 @@ export const useMusicStore = create<MusicStore>((set, get ) => ({
   isLoading: false,
   error: null,
   currentAlbum: null,
-  madeForYouSongs: [],
   featuredSongs: [],
+  madeForYouSongs: [],
+  allMadeForYouSongs: [],
   trendingSongs: [],
+  allTrendingSongs: [],
   stats: {
     totalSongs: 0,
     totalAlbums: 0,
@@ -89,6 +95,20 @@ export const useMusicStore = create<MusicStore>((set, get ) => ({
     }
   },
 
+  fetchAllMadeForYouSongs: async (): Promise<Song[]> => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axiosInstance.get("/songs/all-made-for-you");
+      set({ allMadeForYouSongs: response.data });
+      return response.data;
+    } catch (error: any) {
+      set({ error: error.response.data.message });
+      return [];
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
   fetchTrendingSongs: async () => {
     set({ isLoading: true, error: null });
     try {
@@ -96,6 +116,20 @@ export const useMusicStore = create<MusicStore>((set, get ) => ({
       set({ trendingSongs: response.data });
     } catch (error: any) {
       set({ error: error.response.data.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  fetchAllTrendingSongs: async (): Promise<Song[]> => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axiosInstance.get("/songs/all-trending");
+      set({ allTrendingSongs: response.data });
+      return response.data;
+    } catch (error: any) {
+      set({ error: error.response.data.message });
+      return [];
     } finally {
       set({ isLoading: false });
     }
@@ -124,6 +158,7 @@ export const useMusicStore = create<MusicStore>((set, get ) => ({
       set({ isLoading: false });
     }
   },
+  
   deleteSong: async (id) => {
     set({ isLoading: true, error: null });
     try {

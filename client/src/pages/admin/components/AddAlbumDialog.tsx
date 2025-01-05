@@ -95,9 +95,7 @@ const AddAlbumDialog = () => {
                   <div className="text-sm text-emerald-500">
                     Image selected:
                   </div>
-                  <div className="text-xs text-zinc-400">
-                    {imageFile.name}
-                  </div>
+                  <div className="text-xs text-zinc-400">{imageFile.name}</div>
                 </div>
               ) : (
                 <>

@@ -33,7 +33,7 @@ export const getFeaturedSongs = async (
           _id: 1,
           title: 1,
           artist: 1,
-          imageUrl: 1, 
+          imageUrl: 1,
           audioUrl: 1,
         },
       },
@@ -72,6 +72,32 @@ export const getMadeForYouSongs = async (
   }
 };
 
+export const getAllMadeForYouSongs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const songs = await Song.aggregate([
+      {
+        $sort: { createdAt: -1 }, // Sort descending order
+      },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          artist: 1,
+          imageUrl: 1,
+          audioUrl: 1,
+        },
+      },
+    ]);
+    res.status(200).json(songs);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getTrendingSongs = async (
   req: Request,
   res: Response,
@@ -84,6 +110,32 @@ export const getTrendingSongs = async (
         $sample: { size: 4 },
       },
       // display these in the UI
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          artist: 1,
+          imageUrl: 1,
+          audioUrl: 1,
+        },
+      },
+    ]);
+    res.status(200).json(songs);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllTrendingSongs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const songs = await Song.aggregate([
+      {
+        $sort: { createdAt: 1 }, // Sort ascending order
+      },
       {
         $project: {
           _id: 1,
