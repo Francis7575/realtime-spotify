@@ -12,6 +12,6 @@
       "./src/types"  
     ]                     
   },
-  "include": ["src/**/*.ts", "express.d.ts"],           
+  "include": ["src/**/*.ts", "src/types/**/*.d.ts"],           
   "exclude": ["node_modules"]
 }
