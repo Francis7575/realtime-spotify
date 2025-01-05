@@ -1,6 +1,14 @@
-import { clerkClient } from "@clerk/express";
+import { AuthObject, clerkClient } from "@clerk/express";
 import { Request, Response, NextFunction } from "express";
 import "../types/express"
+
+declare global {
+  namespace Express {
+    interface Request {
+      auth?: AuthObject; 
+    }
+  }
+}
 
 export const protectRoute = async (
   req: Request,
