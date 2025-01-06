@@ -40,7 +40,7 @@ const Homepage = () => {
       <Topbar />
       <ScrollArea className="h-[calc(100vh-180px)]">
         <div className="p-4 sm:p-6">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-6">
+          <h1 className="text-xl sm:text-3xl font-bold mb-6">
             Your Soundtrack, Your World✨
           </h1>
           <FeaturedSection />

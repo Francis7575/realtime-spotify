@@ -63,18 +63,18 @@ const AlbumPage = () => {
 
           {/* Content */}
           <div className="relative">
-            <div className="flex p-6 gap-6 pb-8">
+            <div className="flex flex-col md:flex-row items-center md:items-end p-8 md:p-6 md:gap-6 xl:gap-12 gap-4 pb-8">
               <img
                 src={currentAlbum?.imageUrl}
                 alt={currentAlbum?.title}
-                className="w-[240px] h-[240px] shadow-xl rounded"
+                className="shadow-xl rounded max-w-[200px] lg:max-w-[300px]"
               />
-              <div className="flex flex-col justify-end">
-                <p className="text-sm font-medium">Album</p>
-                <h1 className="text-7xl font-bold my-4">
+              <div className="flex flex-col">
+                <p className="text-lg xl:text-xl font-medium">Album</p>
+                <h1 className="text-xl md:text-2xl xl:text-4xl font-bold my-3 lg:my-6">
                   {currentAlbum?.title}
                 </h1>
-                <div className="flex items-center gap-2 text-sm text-zinc-100">
+                <div className="flex items-center gap-2 text-sm xl:text-lg text-zinc-100">
                   <span className="font-medium text-white">
                     {currentAlbum?.artist}
                   </span>

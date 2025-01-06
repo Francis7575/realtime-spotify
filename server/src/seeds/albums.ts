@@ -127,33 +127,10 @@ const seedDatabase = async () => {
         plays: Math.floor(Math.random() * 5000),
         duration: 17, // 0:17
       },
-      {
-        title: "Blank Space",
-        artist: "Taylor Swift",
-        imageUrl: "/cover-images/19.jpg",
-        audioUrl: "/songs/19.mp3",
-        plays: Math.floor(Math.random() * 5000),
-        duration: 241, // 0:40
-      },
-      {
-        title: "Shake it off",
-        artist: "Taylor Swift",
-        imageUrl: "/cover-images/20.jpg",
-        audioUrl: "/songs/20.mp3",
-        plays: Math.floor(Math.random() * 5000),
-        duration: 272, // 4:32
-      },
     ]);
 
     // Create albums with references to song IDs
     const albums = [
-      {
-        title: "Taylor Swift",
-        artist: "Taylor Swift",
-        imageUrl: "/albums/5.png",
-        releaseYear: 2024,
-        songs: createdSongs.slice(14, 16).map((song) => song._id),
-      },
       {
         title: "Urban Nights",
         artist: "Various Artists",
