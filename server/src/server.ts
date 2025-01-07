@@ -10,10 +10,10 @@ app.get("/test", (req: Request, res: Response) => {
   res.status(200).send("Test route working");
 });
 
-// const httpServer = createServer(app);
-// initializeSocket(httpServer);
+const httpServer = createServer(app);
+initializeSocket(httpServer);
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     connectDB();
 })
