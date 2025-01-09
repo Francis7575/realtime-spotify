@@ -38,13 +38,17 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     initAuth();
 
     // clean up
-		return () => disconnectSocket();
+    return () => disconnectSocket();
   }, [getToken, userId, checkAdminStatus, initSocket, disconnectSocket]);
 
   if (loading)
     return (
-      <div className="h-screen w-full flex items-center justify-center">
+      <div className="h-screen w-full flex flex-col gap-4 items-center justify-center">
         <Loader className="size-16 text-emerald-500 animate-spin" />
+        <p className="uppercase text-lg font-bold text-center px-6">
+          The server may take up to 50 seconds to become active. Thank you for your
+          patience.
+        </p>
       </div>
     );
   return <>{children}</>;
