@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import { clerkClient, clerkMiddleware } from "@clerk/express";
+import { clerkMiddleware } from "@clerk/express";
 import morgan from "morgan";
 import fileUpload from "express-fileupload";
 import path from "path";
@@ -41,6 +41,11 @@ app.use(
   })
 );
 
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", message: "Backend is ready" });
+});
+
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
@@ -54,10 +59,6 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
   });
 }
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 
 app.use(morgan("dev"));
 

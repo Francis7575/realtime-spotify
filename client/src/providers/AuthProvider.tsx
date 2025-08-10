@@ -11,6 +11,22 @@ const updateApiToken = (token: string | null) => {
   else delete axiosInstance.defaults.headers.common["Authorization"];
 };
 
+// Helper: Wait until backend responds
+const waitForBackend = async () => {
+  let isReady = false;
+  let attempts = 0;
+
+  while (!isReady && attempts < 20) { // retry up to 20 times (about 1 min)
+    try {
+      await axiosInstance.get("/health");
+      isReady = true;
+    } catch {
+      await new Promise(res => setTimeout(res, 3000)); // wait 3s before retry
+      attempts++;
+    }
+  }
+};
+
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { getToken, userId } = useAuth();
   const { checkAdminStatus } = useAuthStore();
@@ -18,6 +34,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { initSocket, disconnectSocket } = useChatStore();
 
   useEffect(() => {
+    let isMounted = true;
     const initAuth = async () => {
       try {
         const token = await getToken();
@@ -26,19 +43,24 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (token) {
           await checkAdminStatus();
         }
+        await waitForBackend();
+
         // init socket
         if (userId) initSocket(userId);
       } catch (error: unknown) {
         updateApiToken(null);
         console.log("Error in auth provider", error);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
     initAuth();
 
     // clean up
-    return () => disconnectSocket();
+    return () => {
+      isMounted = false;
+      disconnectSocket();
+    };
   }, [getToken, userId, checkAdminStatus, initSocket, disconnectSocket]);
 
   if (loading)
